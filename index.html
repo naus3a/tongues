@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Tongues example</title>
+        <script src="src/Tongues.js"></script>
+        <script>
+        
+        async function loadSecrets(){
+            const url = "secrets.json";
+            const res = await fetch(url);
+            const obj = await res.json();
+            return obj;
+        }
+
+        async function doTheThing(){
+            const secrets = await loadSecrets();
+            
+        }
+
+        doTheThing();
+        </script>
+    </head>
+    <body></body>
+</html>

@@ -13,9 +13,15 @@
             return obj;
         }
 
+        function onResponse(res){
+            console.log(res);
+        }
+
         async function doTheThing(){
             const secrets = await loadSecrets();
-            
+            const tongues = new Tongues(secrets.api.perplexity);
+            tongues.addResponseListener(onResponse);
+            tongues.requestCompletion();
         }
 
         doTheThing();

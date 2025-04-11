@@ -67,7 +67,10 @@ class Tongues{
         };
     }
 
-    async requestCompletion(){
+    async requestCompletion(newUserPrompt=undefined){
+        if(newUserPrompt!=undefined){
+            this.userPrompt = newUserPrompt;
+        }
         fetch('https://api.perplexity.ai/chat/completions', this.makeOptions())
         .then(response => response.json())
         .then(response => this.handleResponseCallbacks(response))

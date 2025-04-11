@@ -82,10 +82,17 @@ class Tongues{
     ///
 
     stripThinking(txt){
+        const thinkOpenTag = "<think>"
         const thinkCloseTag = "</think>"; 
         let pos = txt.search(thinkCloseTag);
         if(pos==-1){
-            return txt;
+            pos = txt.search(thinkOpenTag)
+            if(pos==-1){
+                return txt;
+            }else{
+                console.log("Tongues error: I only got the beginning of a thinking block");
+                return "";
+            }
         }
         pos += thinkCloseTag.length;
         return txt.substring(pos);

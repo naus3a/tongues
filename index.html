@@ -21,11 +21,17 @@
             const secrets = await loadSecrets();
             const tongues = new Tongues(secrets.api.perplexity);
             tongues.addResponseListener(onResponse);
-            tongues.requestCompletion();
+            
+            const el = document.getElementById("clickme");
+            el.addEventListener('click',(event)=>{
+                tongues.requestCompletion();
+            });
         }
 
         doTheThing();
         </script>
     </head>
-    <body></body>
+    <body>
+        <a id="clickme">click me</a>
+    </body>
 </html>

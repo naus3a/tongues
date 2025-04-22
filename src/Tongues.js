@@ -28,31 +28,38 @@ class Tongues{
         return 'Bearer '+this.apiKey;
     }
 
+    makeHeaders(){
+        return {
+            Authorization: this.makeAuthorization(),
+            'Content-Type': 'application/json'
+          }
+    }
+
+    makeBodyMessage(theRole, theContent){
+        return{
+            role: theRole,
+            content: theContent
+        }
+    }
+
     makeBody(){
         return{
-            "model": this.model,
-            "messages": [
-                {
-                    "role":"system",
-                    "content":this.systemPrompt
-                },
-                {
-                    "role":"user",
-                    "content":this.userPrompt
-                }
-            ],
-            "max_tokens":this.maxTokens,
-            "temperature":this.temperature,
-            "top_p":this.top_p,
-            "search_domain_filter":this.searchDomainFilter,
-            "return_images":this.returnImages,
-            "return_related_questions":this.returnRelatedQuestions,
-            "search_recency_filter":this.searchRecensyFilter,
-            "top_k":this.top_k,
-            "stream":this.stream,
-            "presence_penalty":this.presencePenalty,
-            "frequency_penalty":this.frequencyPenalty,
-            "response_format":this.responseFormat
+            temperature: this.temperature,
+            top_p: this.top_p,
+            return_images: this.returnImages,
+            return_related_questions: this.returnRelatedQuestions,
+            top_k: this.top_k,
+            stream: this.stream,
+            presence_penalty: this.presencePenalty,
+            frequency_penalty: this.frequencyPenalty,
+            web_search_options:{
+                search_context_size: this.search_context_size
+            },
+            model: this.model,
+            messages:[
+                this.makeBodyMessage("system", this.systemPrompt),
+                this.makeBodyMessage("user", this.userPrompt)
+            ]
         }
     }
 
@@ -71,10 +78,22 @@ class Tongues{
         if(newUserPrompt!=undefined){
             this.userPrompt = newUserPrompt;
         }
-        fetch('https://api.perplexity.ai/chat/completions', this.makeOptions())
-        .then(response => response.json())
-        .then(response => this.handleResponseCallbacks(response))
-        .catch(err => console.error(err));
+        try{
+            const response = await fetch('https://api.perplexity.ai/chat/completions', this.makeOptions());
+            if(!response.ok){
+                const errData = await response.json();
+                console.error(errData);
+                return;
+            }
+            const data = await response.json();
+            this.handleResponseCallbacks(data);
+        }catch(err){
+            console.error(err);
+        }
+        //fetch('https://api.perplexity.ai/chat/completions', this.makeOptions())
+        //.then(response => response.json())
+        //.then(response => this.handleResponseCallbacks(response))
+        //.catch(err => console.error(err));
     }
 
     ///

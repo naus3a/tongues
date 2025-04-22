@@ -90,10 +90,6 @@ class Tongues{
         }catch(err){
             console.error(err);
         }
-        //fetch('https://api.perplexity.ai/chat/completions', this.makeOptions())
-        //.then(response => response.json())
-        //.then(response => this.handleResponseCallbacks(response))
-        //.catch(err => console.error(err));
     }
 
     ///
